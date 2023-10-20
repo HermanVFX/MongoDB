@@ -1,0 +1,38 @@
+version: "3"
+services:
+
+  client:
+    build: ./client
+    container_name: client
+    environment:
+      SPRING_BOOT_ADMIN_CLIENT_URL: http://server:8081
+      MONGODB_URL: http://mongodb:27017/test_daatabase
+    ports:
+      - "8080:8080"
+    networks:
+      - cool_party
+    depends_on:
+      - mongodb
+      - server
+
+  server:
+    build: ./server
+    container_name: server
+    networks:
+      - cool_party
+    ports:
+      - "8081:8080"
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: password
+    networks:
+      - cool_party
+    ports:
+      - "27017:27017"
+
+networks:
+  cool_party:
